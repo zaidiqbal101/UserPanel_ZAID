@@ -85,7 +85,7 @@ const PayInsuranceBill = () => {
         {error && <p className="text-red-500">{error}</p>}
         {apiResponse && (
           <div className="mt-4">
-            <h2 className="text-xl font-bold mb-2">API Response</h2>
+            <h2 className="text-xl font-bold mb-2">API Response:</h2>
             <table className="w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
