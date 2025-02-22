@@ -1,0 +1,203 @@
+[
+    {
+      "title": "Dashboard",
+      "icon": "Home",
+      "href": "/admin/dashboard"
+    },
+    {
+      "title": "Recharge",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": "Do Recharge",
+          "href": "/admin/recharge/dorecharge"
+        },
+        {
+          "title": "Status Enquiry",
+          "href": "/admin/recharge/recharge2"
+        },
+        {
+          "title": "Manage Operator",
+          "href": "/admin/recharge/manage-operator"
+        }
+      ]
+    },
+    {
+      "title": "Bus Booking",
+      "icon": "BusFront",
+      "subMenu": [
+        {
+            "title": "Get Source City",
+            "href": "/admin/busTicket/getSourceCity"
+          },
+        {
+          "title": "Get Available Trip",
+          "href": "/admin/busTicket/getAvailableTrip"
+        },
+        {
+          "title": "Get Current Trip Details",
+          "href": "/admin/busTicket/getCurrentTripDetails"
+        },
+        {
+            "title": "Book Tickets",
+            "href": "/admin/busTicket/bookTicket"
+          },
+          {
+            "title": "Get Boarding Point Details",
+            "href": "/admin/busTicket/getBoardingPointDetails"
+          },
+          {
+            "title": "Check Booked Tickets",
+            "href": "/admin/busTicket/checkBookedTickets"
+          }
+      ]
+    },
+    {
+      "title": "Remitter",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": "Query Remitter",
+          "href": "/admin/remitter2/queryRemitter"
+        },
+        {
+          "title": "Remitter Aadhar verify API",
+          "href": "/admin/remitter2/remitterAdhaarVerifyApi"
+        },
+        {
+          "title": "Register Remitter",
+          "href": "/admin/remitter2/registerRemitter"
+        } 
+      ]
+    },
+    {
+      "title": "Beneficiary",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": " Register Beneficiary",
+          "href": "/admin/beneficiary2/registerBeneficiary"
+        },
+        {
+          "title": "Delete Beneficiary",
+          "href": "/admin/beneficiary2/deleteBeneficiary"
+        },
+        {
+          "title": "Fetch Beneficiary",
+          "href": "/admin/beneficiary2/fetchBeneficiary"
+        },
+        {
+          "title": "Fetch Beneficiary By Benied",
+          "href": "/admin/beneficiary2/fetchbyBenied"
+        }
+      ]
+    },
+    {
+      "title": "Transaction",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": "Penny Drop",
+          "href": "/admin/transaction2/pennyDrop"
+        },
+        {
+          "title": "Transaction Sent Otp",
+          "href": "/admin/transaction2/transactionSentOtp"
+        },
+        {
+          "title": "Transaction",
+          "href": "/admin/transaction2/transaction"
+        },
+        {
+          "title": "Transaction Status",
+          "href": "/admin/transaction2/transactionStatus"
+        }
+      ]
+    },
+    {
+      "title": "Refund",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": "Refund Otp",
+          "href": "/admin/refund2/refundOtp"
+        },
+        {
+          "title": "Claim Refund",
+          "href": "/admin/refund2/claimRefund"
+        }
+      ]
+    },
+    {
+      "title": "Utilities ",
+      "icon": "Battery",
+      "subMenu": [
+        {
+          "title": "Bill Payment",
+          "subMenu": [
+            {
+              "title": "Operator List",
+              "href": "/admin/utility-bill-payment/operator-list"
+            },
+            {
+              "title": "Fetch Bill Details",
+              "href": "/admin/utility-bill-payment/fetch-bill-details"
+            },
+            {
+              "title": "Pay Bill",
+              "href": "/admin/utility-bill-payment/pay-bill"
+            },
+            {
+              "title": "Status Enquiry",
+              "href": "/admin/utility-bill-payment/utility-status-enquiry"
+            }
+          ]
+        },
+        {
+          "title": "Insurance  Payment",
+          "subMenu": [
+            {
+              "title": "Fetch Insurance Bill Details",
+              "href": "/admin/InsurancePremiumPayment/FetchInsuranceBillDetails"
+            },
+            {
+              "title": "Pay Insurance Bill",
+              "href": "/admin/InsurancePremiumPayment/PayInsuranceBill"
+            },
+            {
+              "title": "Insurance Status Enquiry",
+              "href": "/admin/InsurancePremiumPayment/InsuranceStatusEnquiry"
+            }
+           
+          ]
+        },
+        {
+          "title": "Fastag Recharge",
+          "subMenu": [
+            {
+              "title": "Operator List",
+              "href": "/admin/FastagRecharge/FastagOperatorList"
+            },
+            {
+              "title": "Fetch Consumer Details",
+              "href": "/admin/FastagRecharge/FastagFetchConsumerDetails"
+            },
+            {
+              "title": "Recharge",
+              "href": "/admin/FastagRecharge/FastagRecharge"
+            }, {
+              "title": "Status",
+              "href": "/admin/FastagRecharge/FastagStatus"
+            }
+           
+          ]
+        }
+      ]
+    }
+    
+    
+  
+
+    
+  ]
+  

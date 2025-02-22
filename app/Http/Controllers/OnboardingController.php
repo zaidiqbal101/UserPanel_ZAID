@@ -1,75 +1,58 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Onboarding;
+use App\Models\OnboardingForm;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class OnboardingController extends Controller
 {
     public function index()
     {
-        $onboardings = Onboarding::all();
-        return response()->json($onboardings);
+        return Inertia::render('Admin/Recharge/OnboardingForm');
     }
 
-    /**
-     * Store a newly created onboard record.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'merchantcode' => 'required|string|unique:onboardings,merchantcode',
-            'mobile' => 'required|digits:10',
+            'merchantcode' => 'required|string',
+            'mobile' => 'required|string|size:10',
             'is_new' => 'required|boolean',
-            'email' => 'required|email|unique:onboardings,email',
+            'email' => 'required|email',
             'firm' => 'required|string',
-            'callback_url' => 'nullable|string',
+            'aadhaarFront' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'aadhaarBack' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'panCard' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048'
         ]);
 
-        $onboarding = Onboarding::create([
-            'merchantcode' => $request->merchantcode,
-            'mobile' => $request->mobile,
-            'is_new' => $request->is_new,
-            'email' => $request->email,
-            'firm' => $request->firm,
-            'callback_url' => $request->callback_url,
-        ]);
+        $data = $request->only(['merchantcode', 'mobile', 'is_new', 'email', 'firm']);
 
-        return response()->json(['message' => 'Onboarding record created successfully', 'data' => $onboarding], 201);
-    }
+        // Handle file uploads
+        if ($request->hasFile('aadhaarFront')) {
+            $data['aadhaarFront'] = $request->file('aadhaarFront')->store('documents', 'public');
+        }
+        if ($request->hasFile('aadhaarBack')) {
+            $data['aadhaarBack'] = $request->file('aadhaarBack')->store('documents', 'public');
+        }
+        if ($request->hasFile('panCard')) {
+            $data['panCard'] = $request->file('panCard')->store('documents', 'public');
+        }
 
-    /**
-     * Display the specified onboard record.
-     */
-    public function show(Onboarding $onboarding)
-    {
-        return response()->json($onboarding);
-    }
+        try {
+            $onboarding = OnboardingForm::create($data);
 
-    /**
-     * Update the specified onboard record.
-     */
-    public function update(Request $request, Onboarding $onboarding)
-    {
-        $request->validate([
-            'mobile' => 'nullable|digits:10',
-            'is_new' => 'nullable|boolean',
-            'email' => 'nullable|email|unique:onboardings,email,' . $onboarding->id,
-            'firm' => 'nullable|string',
-            'callback_url' => 'nullable|string',
-        ]);
-
-        $onboarding->update($request->all());
-
-        return response()->json(['message' => 'Onboarding record updated successfully', 'data' => $onboarding]);
-    }
-
-    /**
-     * Remove the specified onboard record.
-     */
-    public function destroy(Onboarding $onboarding)
-    {
-        $onboarding->delete();
-        return response()->json(['message' => 'Onboarding record deleted successfully']);
+            return response()->json([
+                'status' => true,
+                'message' => 'Onboarding form submitted successfully',
+                'data' => $onboarding
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to submit onboarding form',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

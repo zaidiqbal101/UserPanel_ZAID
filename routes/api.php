@@ -9,3 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/test-api', [ApiController::class, 'index']);
+
+Route::post('/recharge/status-enquiry', [RechargeController::class, 'storeStatusEnquiry']);

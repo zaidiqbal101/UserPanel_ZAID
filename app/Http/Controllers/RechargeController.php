@@ -18,80 +18,99 @@ class RechargeController extends Controller
     
     public function processRecharge(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'operator' => 'required',
-            'canumber' => 'required',
-            'amount' => 'required|numeric|min:1',
-            'referenceid' => 'required'
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-    
         try {
-            Log::info('Processing recharge request:', $request->all()); // Log the request data
-    
-            $transaction = RechargeTransaction::create([
-                'operator' => $request->operator,
-                'canumber' => $request->canumber,
-                'amount' => $request->amount,
-                'referenceid' => $request->referenceid,
-                'status' => $request->status ?? 'pending',
-                'response_code' => $request->response_code,
-                'operatorid' => $request->operatorid,
-                'ackno' => $request->ackno,
-                'message' => $request->message ?? 'Transaction initiated'
+            $validator = Validator::make($request->all(), [
+                'operator' => 'required',
+                'canumber' => 'required',
+                'amount' => 'required|numeric|min:1',
+                'referenceid' => 'required',
+                'status' => 'required|in:pending,success,failed',
+                'message' => 'required'
             ]);
-    
-            Log::info('Recharge transaction created:', $transaction->toArray()); // Log the created transaction
-    
+        
+            if ($validator->fails()) {
+                Log::error('Validation failed:', $validator->errors()->toArray());
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            
+            $transaction = RechargeTransaction::create($request->all());
+            
+            Log::info('Transaction created successfully:', $transaction->toArray());
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Transaction stored successfully',
                 'data' => $transaction
             ]);
-    
+            
         } catch (\Exception $e) {
             Log::error('Recharge processing failed: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString()); // Log the stack trace
-    
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to process recharge',
-                'error' => $e->getMessage()
+                'message' => 'Failed to process recharge: ' . $e->getMessage()
             ], 500);
         }
     }
-    public function getTransactions()
+
+    public function updateTransaction(Request $request)
     {
         try {
-            $transactions = RechargeTransaction::orderBy('created_at', 'desc')->get();
-            
+            $validator = Validator::make($request->all(), [
+                'referenceid' => 'required|string',
+                'status' => 'required|string',
+                'message' => 'required|string'
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $transaction = RechargeTransaction::where('referenceid', $request->referenceid)
+                ->first();
+
+            if (!$transaction) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Transaction not found'
+                ], 404);
+            }
+
+            $transaction->update([
+                'status' => $request->status,
+                'response_code' => $request->response_code ?? null,
+                'message' => $request->message
+            ]);
+
             return response()->json([
                 'status' => true,
-                'data' => $transactions
+                'message' => 'Transaction updated successfully',
+                'data' => $transaction
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to fetch transactions: ' . $e->getMessage());
+            Log::error('Transaction update failed: ' . $e->getMessage());
             
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to fetch transactions',
-                'error' => $e->getMessage()
+                'message' => 'Failed to update transaction: ' . $e->getMessage()
             ], 500);
         }
     }
-
     public function recharge2()
     {
         return Inertia::render('Admin/Recharge/Recharge2');
     }
+    
     public function listRechargeOperators()
     {
         try {

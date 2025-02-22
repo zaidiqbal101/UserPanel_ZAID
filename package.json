@@ -22,6 +22,8 @@
     },
     "dependencies": {
         "@inertiajs/react": "^1.0.0",
-        "lucide-react": "^0.475.0"
+        "framer-motion": "^12.4.7",
+        "lucide-react": "^0.475.0",
+        "recharts": "^2.15.1"
     }
 }
