@@ -53,81 +53,88 @@
       ]
     },
     {
-      "title": "Remitter",
+      "title": "DMT BANK 2",
       "icon": "Battery",
       "subMenu": [
         {
-          "title": "Query Remitter",
-          "href": "/admin/remitter2/queryRemitter"
+          "title": "Remitter",
+          "subMenu": [
+            {
+              "title": "Query Remitter",
+              "href": "/admin/remitter2/queryRemitter"
+            },
+            {
+              "title": "Remitter Aadhar verify API",
+              "href": "/admin/remitter2/remitterAdhaarVerifyApi"
+            },
+            {
+              "title": "Register Remitter",
+              "href": "/admin/remitter2/registerRemitter"
+            }
+          ]
         },
         {
-          "title": "Remitter Aadhar verify API",
-          "href": "/admin/remitter2/remitterAdhaarVerifyApi"
-        },
-        {
-          "title": "Register Remitter",
-          "href": "/admin/remitter2/registerRemitter"
-        } 
-      ]
-    },
-    {
-      "title": "Beneficiary",
-      "icon": "Battery",
-      "subMenu": [
-        {
-          "title": " Register Beneficiary",
-          "href": "/admin/beneficiary2/registerBeneficiary"
-        },
-        {
-          "title": "Delete Beneficiary",
-          "href": "/admin/beneficiary2/deleteBeneficiary"
-        },
-        {
-          "title": "Fetch Beneficiary",
-          "href": "/admin/beneficiary2/fetchBeneficiary"
-        },
-        {
-          "title": "Fetch Beneficiary By Benied",
-          "href": "/admin/beneficiary2/fetchbyBenied"
-        }
-      ]
-    },
-    {
-      "title": "Transaction",
-      "icon": "Battery",
-      "subMenu": [
-        {
-          "title": "Penny Drop",
-          "href": "/admin/transaction2/pennyDrop"
-        },
-        {
-          "title": "Transaction Sent Otp",
-          "href": "/admin/transaction2/transactionSentOtp"
+          "title": "Beneficiary",
+          "subMenu": [
+            {
+              "title": "Register Beneficiary",
+              "href": "/admin/beneficiary2/registerBeneficiary"
+            },
+            {
+              "title": "Delete Beneficiary",
+              "href": "/admin/beneficiary2/deleteBeneficiary"
+            },
+            {
+              "title": "Fetch Beneficiary",
+              "href": "/admin/beneficiary2/fetchBeneficiary"
+            },
+            {
+              "title": "Fetch Beneficiary By Benied",
+              "href": "/admin/beneficiary2/fetchbyBenied"
+            }
+          ]
         },
         {
           "title": "Transaction",
-          "href": "/admin/transaction2/transaction"
+          "icon": "Battery",
+          "subMenu": [
+            {
+              "title": "Penny Drop",
+              "href": "/admin/transaction2/pennyDrop"
+            },
+            {
+              "title": "Transaction Sent Otp",
+              "href": "/admin/transaction2/transactionSentOtp"
+            },
+            {
+              "title": "Transaction",
+              "href": "/admin/transaction2/transaction"
+            },
+            {
+              "title": "Transaction Status",
+              "href": "/admin/transaction2/transactionStatus"
+            }
+          ]
         },
         {
-          "title": "Transaction Status",
-          "href": "/admin/transaction2/transactionStatus"
+          "title": "Refund",
+          "icon": "Battery",
+          "subMenu": [
+            {
+              "title": "Refund Otp",
+              "href": "/admin/refund2/refundOtp"
+            },
+            {
+              "title": "Claim Refund",
+              "href": "/admin/refund2/claimRefund"
+            }
+          ]
         }
       ]
     },
-    {
-      "title": "Refund",
-      "icon": "Battery",
-      "subMenu": [
-        {
-          "title": "Refund Otp",
-          "href": "/admin/refund2/refundOtp"
-        },
-        {
-          "title": "Claim Refund",
-          "href": "/admin/refund2/claimRefund"
-        }
-      ]
-    },
+    
+  
+
     {
       "title": "Utilities ",
       "icon": "Battery",
@@ -180,15 +187,64 @@
             },
             {
               "title": "Fetch Consumer Details",
-              "href": "/admin/FastagRecharge/FastagFetchConsumerDetails"
+              "href": "/admin/FastagRecharge/fetchConsumerDetails"
             },
             {
               "title": "Recharge",
-              "href": "/admin/FastagRecharge/FastagRecharge"
-            }, {
+              "href": "/admin/FastagRecharge/fastagRecharge"
+            },
+             {
               "title": "Status",
               "href": "/admin/FastagRecharge/FastagStatus"
             }
+           
+          ]
+        },
+        {
+          "title": "LPG Booking & Payment",
+          "subMenu": [
+            {
+              "title": "Operator List",
+              "href": "/admin/LPG/LPGOperator"
+            },
+            {
+              "title": "Fetch LPG Details",
+              "href": "/admin/LPG/LPGDetails"
+            }
+            ,
+            {
+              "title": "Pay Bill",
+              "href": "/admin/LPG/LPGBill"
+            },
+            {
+              "title": "Status",
+              "href": "/admin/LPG/LPGStatus"
+            }
+            
+           
+          ]
+        },
+        {
+          "title": "Municipality Payment",
+          "subMenu": [
+            {
+              "title": "Operator List",
+              "href": "/admin/Municipality/MunicipalityOperator"
+            },
+            {
+              "title": "Fetch Municipality Details",
+              "href": "/admin/Municipality/FetchMunicipalityDetails"
+            }
+            ,
+            {
+              "title": "Pay Bill",
+              "href": "/admin/Municipality/MunicipalityBill"
+            },
+            {
+              "title": "Status",
+              "href": "/admin/Municipality/MunicipalityStatus"
+            }
+            
            
           ]
         }

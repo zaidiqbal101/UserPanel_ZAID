@@ -9,9 +9,11 @@ use App\Http\Controllers\Remitter2Controller;
 use App\Http\Controllers\InsurancePremiumPaymentController;
 use App\Http\Controllers\Beneficiary2Controller;
 use App\Http\Controllers\Transaction2Controller;
+use App\Http\Controllers\LPGController;
 use App\Http\Controllers\Refund2Controller;
 use App\Http\Controllers\UtilitybillPaymentController;
 use App\Http\Controllers\FastagRechargeController;
+use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -192,6 +194,45 @@ Route::get('/admin/InsurancePremiumPayment/InsuranceStatusEnquiry',[InsurancePre
 Route::post('/admin/InsurancePremiumPayment/fetchInsuranceStatus', [InsurancePremiumPaymentController::class, 'fetchInsuranceStatus'])->name('InsurancePremiumPayment.fetchInsuranceStatus');
 
 //Fastag Recharge
+//operator
 Route::get('/admin/FastagRecharge/FastagOperatorList',[FastagRechargeController::class,'fastagRechargeOperatorList'])->name('FastagRecharge.FastagOperatorList');
 Route::get('/admin/fastag-operators', [FastagController::class, 'fastagRechargeOperatorList'])->name('admin.fastag-operators');
+//consumer details 
+Route::get('/admin/FastagRecharge/fetchConsumerDetails',[FastagRechargeController::class,'fetchConsumerDetails'])->name('FastagRecharge.FastagFetchConsumerDetails');
+Route::post('/api/fetchConsumerDetails', [FastagRechargeController::class, 'getConsumerDetails'])->name('FastagRecharge.getConsumerDetails');
+//recharge
+Route::get('/admin/FastagRecharge/fastagRecharge',[FastagRechargeController::class,'FastagRecharge'])->name('FastagRecharge.FastagRecharge');
+
+//status
+Route::get('/admin/FastagRecharge/FastagStatus',[FastagRechargeController::class,'FastagStatus'])->name('FastagRecharge.FastagStatus');
+//LPG
+Route::prefix('admin')->group(function () {
+    Route::get('LPG/LPGOperator', [LPGController::class, 'LPGOperator'])->name('LPG.LPGOperator');
+});
+
+
+Route::post('api/fetch-lpg-operator', [LPGController::class, 'fetchLPGOperator']);
+//fetch lpg details
+Route::get('/admin/LPG/LPGDetails',[LPGController::class,'FetchLPGDetails'])->name('LPG.FetchLPGDetails');
+Route::match(['get', 'post'], '/admin/LPG/FetchLPGDetails', [LPGController::class, 'FetchLPGDetails'])->name('LPG.FetchLPGDetails');
+//lpg
+Route::get('/admin/LPG/LPGBill',[LPGController::class,'LPGBill'])->name('LPG.LPGBill');
+Route::post('/pay-lpg-bill', [LPGController::class, 'payLpgBill']);
+Route::get('/lpg-bill-history', [LPGController::class, 'getLpgBillHistory']);
+//status
+Route::get('/admin/LPG/LPGStatus', [LPGController::class, 'LPGStatus'])->name('LPG.LPGStatus');
+Route::post('/lpg-status', [LPGController::class, 'getLPGStatus']);
+//Municipality
+//operator
+Route::get('/admin/Municipality/MunicipalityOperator', [MunicipalityController::class, 'MunicipalityOperator'])->name('Municipality.MunicipalityOperator');
+Route::get('/municipality/operator', [MunicipalityController::class, 'MunicipalityOperator'])->name('municipality.operator');
+Route::post('/municipality/fetch', [MunicipalityController::class, 'fetchMunicipalityOperator'])->name('municipality.fetch');
+//fetch municipality details
+Route::get('/admin/Municipality/FetchMunicipalityDetails', [MunicipalityController::class, 'FetchMunicipalityDetails'])->name('Municipality.FetchMunicipalityDetails');
+Route::post('/api/municipality/fetch-bill', [MunicipalityController::class, 'fetchBillDetails']);
+Route::get('/admin/Municipality/FetchMunicipalityBill', [MunicipalityController::class, 'FetchMunicipalityDetails'])->name('Municipality.FetchMunicipalityDetails');
+//Pay Bill
+Route::get('/admin/Municipality/MunicipalityBill', [MunicipalityController::class, 'PayMunicipalityBill'])->name('Municipality.MunicipalityBill');
+//Status
+Route::get('/admin/Municipality/MunicipalityStatus', [MunicipalityController::class, 'MunicipalityStatus'])->name('Municipality.MunicipalityStatus');
 Route::redirect('/', '/admin/dashboard');
