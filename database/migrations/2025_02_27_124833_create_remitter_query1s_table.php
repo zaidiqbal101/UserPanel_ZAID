@@ -7,27 +7,25 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations. old
+     * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('remitter_aadhar_verifies', function (Blueprint $table) {
+        Schema::create('remitter_query1s', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
-            $table->string('response_code');
+            $table->string('mobile', 10)->unique();
+            $table->boolean('status');
+            $table->integer('response_code');
             $table->string('message');
-            $table->string('mobile');
-            $table->string('aadhaar_no');
             $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('remitter_aadhar_verifies');
+        Schema::dropIfExists('remitter_query1s');
     }
 };

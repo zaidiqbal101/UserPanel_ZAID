@@ -31,6 +31,11 @@ const Transaction = ({ transactionData }) => {
     router.post('/admin/transaction2/transact', formData);
   };
 
+  const handleSendOtp = () => {
+    console.log('Sending OTP for bene_id:', formData.bene_id);
+    // Implement OTP sending logic here
+  };
+
   return (
     <AdminLayout>
       <h1 className="text-2xl font-bold mb-4">Transaction</h1>
@@ -50,14 +55,25 @@ const Transaction = ({ transactionData }) => {
                 <tr key={key}>
                   <td className="border p-2 font-semibold capitalize">{key}</td>
                   <td className="border p-2">
-                    <input
-                      type="text"
-                      name={key}
-                      value={formData[key]}
-                      onChange={handleChange}
-                      required
-                      className="border rounded-lg p-2 w-full"
-                    />
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        name={key}
+                        value={formData[key]}
+                        onChange={handleChange}
+                        required
+                        className="border rounded-lg p-2 w-full"
+                      />
+                      {key === 'bene_id' && (
+                        <button
+                          type="button"
+                          onClick={handleSendOtp}
+                          className="bg-green-600 text-white px-3 py-1  rounded-lg"
+                        >
+                          Send OTP
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )

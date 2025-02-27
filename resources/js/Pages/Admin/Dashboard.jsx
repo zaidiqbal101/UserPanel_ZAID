@@ -44,7 +44,7 @@ const Dashboard = () => {
                 </div>
                 <div className="ml-4">
                   <h2 className="text-sm font-medium text-gray-500">Balance</h2>
-                  <p className="text-2xl font-semibold text-gray-900">₹10,245</p>
+                  <p className="text-2xl font-semibold text-gray-900">₹5,84,60,035</p>
                 </div>
               </div>
               <div className="flex items-center text-green-500">

@@ -7,6 +7,7 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\BusTicketController;
 use App\Http\Controllers\Remitter2Controller;
 use App\Http\Controllers\InsurancePremiumPaymentController;
+use App\Http\Controllers\DMTBank1Controller;
 use App\Http\Controllers\Beneficiary2Controller;
 use App\Http\Controllers\Transaction2Controller;
 use App\Http\Controllers\LPGController;
@@ -51,6 +52,10 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+
+
+
 
 Route::post('/recharge/update', [RechargeController::class, 'updateTransaction']);
 
@@ -222,17 +227,56 @@ Route::get('/lpg-bill-history', [LPGController::class, 'getLpgBillHistory']);
 //status
 Route::get('/admin/LPG/LPGStatus', [LPGController::class, 'LPGStatus'])->name('LPG.LPGStatus');
 Route::post('/lpg-status', [LPGController::class, 'getLPGStatus']);
+
+
 //Municipality
+
 //operator
 Route::get('/admin/Municipality/MunicipalityOperator', [MunicipalityController::class, 'MunicipalityOperator'])->name('Municipality.MunicipalityOperator');
-Route::get('/municipality/operator', [MunicipalityController::class, 'MunicipalityOperator'])->name('municipality.operator');
-Route::post('/municipality/fetch', [MunicipalityController::class, 'fetchMunicipalityOperator'])->name('municipality.fetch');
+Route::get('/municipality/operator', [MunicipalityController::class, 'showMunicipalityOperator'])->name('municipality.operator');// only to fetch operators data from databse
+Route::post('/municipality/fetch', [MunicipalityController::class, 'fetchMunicipalityOperator'])->name('municipality.fetch');//used to fetch from api
+Route::post('/municipality/save', [MunicipalityController::class, 'store']);// use to stor fetched opertor from api to databse
+
+
+
+
 //fetch municipality details
 Route::get('/admin/Municipality/FetchMunicipalityDetails', [MunicipalityController::class, 'FetchMunicipalityDetails'])->name('Municipality.FetchMunicipalityDetails');
 Route::post('/api/municipality/fetch-bill', [MunicipalityController::class, 'fetchBillDetails']);
-Route::get('/admin/Municipality/FetchMunicipalityBill', [MunicipalityController::class, 'FetchMunicipalityDetails'])->name('Municipality.FetchMunicipalityDetails');
+Route::post('/municipality/save-bill', [MunicipalityController::class, 'storeBillDetails'])->name('municipality.save-bill');
+
+
 //Pay Bill
-Route::get('/admin/Municipality/MunicipalityBill', [MunicipalityController::class, 'PayMunicipalityBill'])->name('Municipality.MunicipalityBill');
+Route::get('/admin/Municipality/MunicipalityBill', [MunicipalityController::class, 'showMunicipalityBill'])->name('Municipality.MunicipalityBill');
+Route::post('/api/Municipality/pay-bill', [MunicipalityController::class, 'PayMunicipalityBill'])->name('Municipality.MunicipalityPayBill');
+
+
 //Status
 Route::get('/admin/Municipality/MunicipalityStatus', [MunicipalityController::class, 'MunicipalityStatus'])->name('Municipality.MunicipalityStatus');
+Route::post('/api/Municipality/MunicipalityStatus', [MunicipalityController::class, 'MunicipalityEnquiryStatus'])->name('Municipality.MunicipalityEnquiryStatus');
+
+//DMT BANK1
+//query remitter
+Route::get('/admin/remitter1/queryRemitter', [DMTBank1Controller::class, 'QueryRemitter'])->name('remitter1.queryRemitter');
+Route::post('/query-remitter', [DMTBank1Controller::class, 'fetchQueryRemitter']);
+//Remitter E-KYC API
+Route::get('/admin/remitter1/remitterEKYC',[DMTBank1Controller::class,'RemitterEKYC'])->name('remitter1.remitterE-KYC');
+Route::post('/admin/remitter1/fetchRemitterEKYC', [DMTBank1Controller::class, 'fetchRemitterEKYC'])->name('remitter1.fetchRemitterEKYC');
+//Register Remitter
+Route::get('/admin/remitter1/registerRemitter',[DMTBank1Controller::class,'RegisterRemitter'])->name('remitter1.registerRemitter');
+Route::post('/register-remitter', [DMTBank1Controller::class, 'processRegisterRemitter'])->name('remitter1.processRegisterRemitter');
+//Beneficiary
+
+//Register Beneficiary
+Route::get('/admin/beneficiary1/registerBeneficiary',[DMTBank1Controller::class,'RegisterBeneficiary'])->name('register-beneficiary');
+Route::post('/register-beneficiary', [DMTBank1Controller::class, 'storeBeneficiary'])->name('store-beneficiary');
+//Delete Beneficiary
+Route::get('/admin/beneficiary1/deleteBeneficiary',[DMTBank1Controller::class,'deleteBeneficiary'])->name('register.deleteBeneficiary');
+//Fetch Beneficiary
+Route::get('/admin/beneficiary1/FetchBeneficiary', [DMTBank1Controller::class, 'fetchBeneficiary'])->name('register.fetchBeneficiary');
+Route::get('/admin/beneficiary1/FetchBeneficiary', [DMTBank1Controller::class, 'fetchBeneficiaryByBenied'])->name('register.fetchBeneficiaryByBenied');
+//Penny Drop
+Route::get('/admin/transaction1/pennyDrop', [DMTBank1Controller::class, 'pennyDrop'])->name('register.PennyDrop');
+//transaction sent-otp
+Route::get('/admin/transaction1/transactionOtp', [DMTBank1Controller::class, 'transactionOtp'])->name('register.transactionOtp');
 Route::redirect('/', '/admin/dashboard');

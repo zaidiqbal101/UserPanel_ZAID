@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations. old
+     * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('remitter_aadhar_verifies', function (Blueprint $table) {
             $table->id();
@@ -17,11 +17,10 @@ return new class extends Migration
             $table->string('response_code');
             $table->string('message');
             $table->string('mobile');
-            $table->string('aadhaar_no');
+            $table->string('masked_aadhaar');
             $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.

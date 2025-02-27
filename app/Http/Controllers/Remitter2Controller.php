@@ -80,6 +80,11 @@ class Remitter2Controller extends Controller
     }
 
 
+    public function maskAadhaar($aadhaar)
+    {
+        
+        return 'XXXX-XXXX-XXXX-' . substr($aadhaar, -4);
+    }
 
     public function showRemitterAdhaarVerifyApi()
     {
@@ -102,7 +107,7 @@ class Remitter2Controller extends Controller
             // Initialize Guzzle HTTP client
             $client = new Client();
     
-            // Make the API request
+            // Make the API request with full Aadhaar number
             $response = $client->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/remitter/queryremitter/aadhar_verify', [
                 'headers' => [
                     'AuthorisedKey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
@@ -116,13 +121,14 @@ class Remitter2Controller extends Controller
                 ],
             ]);
     
-            // Decode the JSON response
+
             $apiResponse = json_decode($response->getBody()->getContents(), true);
-    
-            // Store the verification result in database
+
+            $maskedAadhaar = $this->maskAadhaar($request->aadhaar_no);
+ 
             $verification = RemitterAadharVerify::create([
                 'mobile' => $request->mobile,
-                'aadhaar_no' => $request->aadhaar_no,
+                'masked_aadhaar' => $maskedAadhaar, 
                 'status' => $apiResponse['status'] ?? 'FAILED',
                 'response_code' => $apiResponse['response_code'] ?? 'ERROR',
                 'message' => $apiResponse['message'] ?? 'API call failed',
@@ -156,34 +162,35 @@ class Remitter2Controller extends Controller
             'mobile' => 'required|digits:10',
             'aadhaar_no' => 'required|digits:16',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors()->first()
             ], 422);
         }
-
+    
         try {
-            // Here you would make the actual API call to verify Aadhaar
-            // This is a placeholder for your actual API integration
             $apiResponse = $this->verifyAadhaarWithAPI($request->mobile, $request->aadhaar_no);
-
-            // Store the verification result in database
+    
+            // Mask the Aadhaar number
+            $maskedAadhaar = $this->maskAadhaar($request->aadhaar_no);
+    
+            // Store the verification result with masked Aadhaar
             $verification = RemitterAadharVerify::create([
                 'status' => $apiResponse['status'] ?? 'FAILED',
                 'response_code' => $apiResponse['response_code'] ?? 'ERROR',
                 'message' => $apiResponse['message'] ?? 'API call failed',
                 'mobile' => $request->mobile,
-                'aadhaar_no' => $request->aadhaar_no,
+                'masked_aadhaar' => $maskedAadhaar, // Store masked version
             ]);
-
+    
             // Return the response to the frontend
             return response()->json([
                 'status' => $apiResponse['status'] ?? 'FAILED',
                 'message' => $apiResponse['message'] ?? 'Verification failed',
                 'data' => $verification
             ]);
-
+    
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'An error occurred during verification: ' . $e->getMessage()
@@ -193,14 +200,22 @@ class Remitter2Controller extends Controller
 
     private function verifyAadhaarWithAPI($mobile, $aadhaar)
     {
-        // TODO: Implement your actual Aadhaar verification API call here
-        // This is just a placeholder response
-        return [
-            'status' => 'SUCCESS',
-            'response_code' => '200',
-            'message' => 'Verification successful',
-            // Add other API response fields as needed
-        ];
+       
+        $client = new Client();
+        $response = $client->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/remitter/queryremitter/aadhar_verify', [
+            'headers' => [
+                'AuthorisedKey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
+                'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3MzkzNDM0NDIsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5MzQzNDQyIn0.oenxjDuLp4lPTB_fCDZL98ENr6I-ULmw0u9XkGgWZI4',
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+            ],
+            'json' => [
+                'mobile' => $mobile,
+                'aadhaar_no' => $aadhaar, 
+            ],
+        ]);
+        
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function showVerificationForm()

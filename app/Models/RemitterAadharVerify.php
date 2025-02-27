@@ -14,6 +14,6 @@ class RemitterAadharVerify extends Model
         'response_code',
         'message',
         'mobile',
-        'aadhaar_no',
+        'masked_aadhaar',
     ];
 }
