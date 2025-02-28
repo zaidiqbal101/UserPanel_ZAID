@@ -274,7 +274,13 @@ Route::post('/register-beneficiary', [DMTBank1Controller::class, 'storeBeneficia
 Route::get('/admin/beneficiary1/deleteBeneficiary',[DMTBank1Controller::class,'deleteBeneficiary'])->name('register.deleteBeneficiary');
 //Fetch Beneficiary
 Route::get('/admin/beneficiary1/FetchBeneficiary', [DMTBank1Controller::class, 'fetchBeneficiary'])->name('register.fetchBeneficiary');
-Route::get('/admin/beneficiary1/FetchBeneficiary', [DMTBank1Controller::class, 'fetchBeneficiaryByBenied'])->name('register.fetchBeneficiaryByBenied');
+Route::get('/admin/beneficiary/fetch', [DMTBank1Controller::class, 'fetchBeneficiary'])->name('admin.beneficiary.fetch');
+Route::match(['GET', 'POST'], '/admin/beneficiary/fetch', [DMTBank1Controller::class, 'fetchBeneficiary'])->name('admin.beneficiary.fetch');
+
+Route::get('/admin/beneficiary1/FetchBeneficiaryByBenied', [DMTBank1Controller::class, 'fetchBeneficiaryByBenied'])->name('register.fetchBeneficiaryByBenied');
+Route::post('/admin/beneficiary/fetch-by-beneid', [DMTBank1Controller::class, 'fetchBeneficiaryByBeneId'])->name('admin.beneficiary.fetchByBeneId');
+
+
 //Penny Drop
 Route::get('/admin/transaction1/pennyDrop', [DMTBank1Controller::class, 'pennyDrop'])->name('register.PennyDrop');
 //transaction sent-otp

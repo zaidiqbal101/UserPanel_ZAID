@@ -90,7 +90,7 @@
             },            
             {
               "title": "Fetch Beneficiary By Benied",
-              "href": "/admin/beneficiary1/FetchBeneficiary"
+              "href": "/admin/beneficiary1/FetchBeneficiaryByBenied"
             }
             
           ]

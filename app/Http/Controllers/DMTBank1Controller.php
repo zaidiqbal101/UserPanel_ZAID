@@ -166,10 +166,44 @@ public function deleteBeneficiary()
 {
     return Inertia::render('Admin/beneficiary1/DeleteBeneficiary');
 }
-public function fetchBeneficiary()
+
+
+public function fetchBeneficiary(Request $request)
 {
-    return Inertia::render('Admin/beneficiary1/FetchBeneficiary');
+    // Check if the request contains a mobile number
+    if (!$request->has('mobile')) {
+        return Inertia::render('Admin/beneficiary1/FetchBeneficiary');
+    }
+
+    // Define API URL and headers
+    $apiUrl = "https://sit.paysprint.in/service-api/api/v1/service/dmt/kyc/beneficiary/registerbeneficiary/fetchbeneficiary";
+    $authorisedKey = "Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=";
+    $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk3OTc1MzUsInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5Nzk3NTM1In0.d-5zd_d8YTFYC0pF68wG6qqlyrfNUIBEuvxZ77Rxc0M";
+
+    // Fetch the mobile number from request
+    $mobile = $request->input('mobile');
+
+    // Make the API request
+    $response = Http::withHeaders([
+        'Authorisedkey' => $authorisedKey,
+        'Token' => $token,
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+    ])->post($apiUrl, [
+        'mobile' => $mobile,
+    ]);
+
+    // Convert response to JSON
+    $responseData = $response->json();
+
+    // Pass the response data to the frontend using Inertia
+    return Inertia::render('Admin/beneficiary1/FetchBeneficiary', [
+        'beneficiaryData' => $responseData,
+        'enteredMobile' => $mobile
+    ]);
 }
+
+
 public function fetchBeneficiaryByBenied()
 {
     return Inertia::render('Admin/beneficiary1/FetchBeneficiaryByBenied');
