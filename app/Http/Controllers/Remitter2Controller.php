@@ -60,23 +60,49 @@ class Remitter2Controller extends Controller
     }
     public function storeRemitterData(Request $request)
     {
-        // Validate incoming data
-        $request->validate([
-            'mobile' => 'required|unique:remitters,mobile',
-            'limit' => 'required|numeric',
-        ]);
+        try {
+            // Validate incoming data
+            $validator = Validator::make($request->all(), [
+                'mobile' => 'required|digits:10',
+                'limit' => 'required'
+            ]);
     
-        // Store the remitter data in the database
-        $remitter = Remitter::create([
-            'mobile' => $request->mobile,
-            'limit' => $request->limit,
-        ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
     
-        return response()->json([
-            'success' => true,
-            'message' => 'Remitter data stored successfully',
-            'data' => $remitter,
-        ]);
+            // Check if remitter already exists
+            $remitter = Remitter::where('mobile', $request->mobile)->first();
+    
+            if ($remitter) {
+                // Update existing remitter
+                $remitter->limit = $request->limit;
+                $remitter->save();
+                $message = 'Remitter data updated successfully';
+            } else {
+                // Create new remitter
+                $remitter = Remitter::create([
+                    'mobile' => $request->mobile,
+                    'limit' => $request->limit,
+                ]);
+                $message = 'Remitter data stored successfully';
+            }
+    
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'data' => $remitter,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Remitter storage error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while saving remitter data: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
 

@@ -195,7 +195,7 @@ const Operators = () => {
         <button 
           onClick={fetchExternalOperators}
           disabled={isSynced}
-          className={`ml-4 px-3 py-1 rounded ${
+          className={`ml-4 px-2 py-1 rounded ${
             isSynced 
               ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
               : 'bg-green-500 text-white hover:bg-green-600'
@@ -220,26 +220,27 @@ const Operators = () => {
       )}
 
       <div className="flex items-start sm:w-1/4 w-full mb-6 rounded-lg">
-        <button
-          onClick={() => setShowTable(true)}
-          className={`px-4 py-2 border-l-2 border-cyan-600 font-medium w-full sm:w-auto ${
-            showTable
-              ? "bg-cyan-600 text-white shadow-lg ring-2 ring-cyan-500"
-              : "bg-gray-100 text-black hover:bg-cyan-600 hover:text-white"
-          } hover:opacity-90 transition duration-300`}
-        >
-          List Operator
-        </button>
-        <button
-          onClick={() => setShowTable(false)}
-          className={`px-4 py-2 border-r-2 border-cyan-600 font-medium w-full sm:w-auto ${
-            !showTable
-              ? "bg-cyan-600 text-white shadow-lg ring-2 ring-cyan-500"
-              : "bg-gray-100 text-black hover:bg-cyan-600 hover:text-white"
-          } hover:opacity-90 transition duration-300`}
-        >
-          Add Operator
-        </button>
+      <button
+  onClick={() => setShowTable(true)}
+  className={`px-4 py-2 border-l-2 border-blue-500 font-medium w-full sm:w-auto ${
+    showTable
+      ? "bg-blue-500 text-white shadow-lg ring-2 ring-blue-400"
+      : "bg-gray-100 text-black hover:bg-blue-700 hover:text-white"
+  } hover:opacity-90 transition duration-300`}
+>
+  List Operator
+</button>
+<button
+  onClick={() => setShowTable(false)}
+  className={`px-4 py-2 border-r-2 border-blue-500 font-medium w-full sm:w-auto ${
+    !showTable
+      ? "bg-blue-500 text-white shadow-lg ring-2 ring-blue-400"
+      : "bg-gray-100 text-black hover:bg-blue-500 hover:text-white"
+  } hover:opacity-90 transition duration-300`}
+>
+  Add Operator
+</button>
+
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white p-6 rounded-lg mb-4 shadow">
@@ -271,7 +272,7 @@ const Operators = () => {
         <div className="col-span-1 sm:col-span-2 md:col-span-1 flex items-end">
           <button
             onClick={handleFilter}
-            className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             disabled={loading}
           >
             Apply Filters

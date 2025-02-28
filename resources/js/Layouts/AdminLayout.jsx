@@ -9,14 +9,16 @@ import {
     User,
     BusFront,
     IndianRupee,
+    Menu,
+    X,
 } from "lucide-react";
 import sidebarItems from "../data/sidebar_items.json";
 
 export default function AdminLayout({ children }) {
     const { auth } = usePage().props;
     const [isMenuOpen, setIsMenuOpen] = useState({});
-
     const [showUserInfo, setShowUserInfo] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const handleLogout = () => {
         router.post(route("logout"));
@@ -29,151 +31,179 @@ export default function AdminLayout({ children }) {
         }));
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <div className="fixed left-0 top-0 w-64 h-screen bg-gray-800 text-white overflow-y-auto">
-                {/* Logo/Header */}
-                <div className="p-4">
-                    <h1 className="text-xl font-bold">Admin Panel</h1>
+            <div
+                className={`fixed left-0 top-0 h-screen bg-gray-800 text-white overflow-y-auto transition-all duration-300 ease-in-out ${
+                    isSidebarOpen ? "w-64" : "w-16"
+                }`}
+            >
+                {/* Sidebar Header with Toggle */}
+                <div className="p-4 flex items-center justify-between">
+                    {isSidebarOpen && (
+                        <h1 className="text-xl font-bold">Admin Panel</h1>
+                    )}
+                    <button
+                        onClick={toggleSidebar}
+                        className="p-1 hover:bg-gray-700 rounded"
+                    >
+                        {isSidebarOpen ? (
+                            <X className="w-6 h-6" />
+                        ) : (
+                            <Menu className="w-6 h-6" />
+                        )}
+                    </button>
                 </div>
 
                 {/* Navigation */}
-                <nav className="mt-4">
-                    <ul>
-                        {sidebarItems.map((item, index) => (
-                            <li key={index} className="mb-2">
-                                {item.subMenu ? (
-                                    <>
-                                        <button
-                                            onClick={() =>
-                                                toggleMenu(item.title)
-                                            }
-                                            className="flex items-center w-full px-4 py-2 hover:bg-gray-700"
-                                        >
-                                            {item.icon === "Home" ? (
-                                                <Home className="w-5 h-5 mr-2" />
-                                            ) : item.icon === "BusFront" ? (
-                                                <BusFront className="w-5 h-5 mr-2" />
-                                            ) : item.icon === "IndianRupee" ? (
-                                                <IndianRupee className="w-5 h-5 mr-2" />
-                                            ) : (
-                                                <Battery className="w-5 h-5 mr-2" />
-                                            )}
-
-                                            <span>{item.title}</span>
-                                            <span className="ml-auto">
-                                                {isMenuOpen[item.title] ? (
-                                                    <ChevronDown className="w-4 h-4" />
+                {isSidebarOpen && (
+                    <nav className="mt-4">
+                        <ul>
+                            {sidebarItems.map((item, index) => (
+                                <li key={index} className="mb-2">
+                                    {item.subMenu ? (
+                                        <>
+                                            <button
+                                                onClick={() =>
+                                                    toggleMenu(item.title)
+                                                }
+                                                className="flex items-center w-full px-4 py-2 hover:bg-gray-700"
+                                            >
+                                                {item.icon === "Home" ? (
+                                                    <Home className="w-5 h-5 mr-2" />
+                                                ) : item.icon ===
+                                                  "BusFront" ? (
+                                                    <BusFront className="w-5 h-5 mr-2" />
+                                                ) : item.icon ===
+                                                  "IndianRupee" ? (
+                                                    <IndianRupee className="w-5 h-5 mr-2" />
                                                 ) : (
-                                                    <ChevronRight className="w-4 h-4" />
+                                                    <Battery className="w-5 h-5 mr-2" />
                                                 )}
-                                            </span>
-                                        </button>
 
-                                        {/* Dropdown Content */}
-                                        {isMenuOpen[item.title] && (
-                                            <ul className="pl-8 mt-2">
-                                                {item.subMenu.map(
-                                                    (subItem, subIndex) => (
-                                                        <li
-                                                            key={subIndex}
-                                                            className="mb-2"
-                                                        >
-                                                            {subItem.subMenu ? (
-                                                                <>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            toggleMenu(
-                                                                                subItem.title
-                                                                            )
-                                                                        }
-                                                                        className="flex items-center w-full px-4 py-2 hover:bg-gray-700"
-                                                                    >
-                                                                        <span>
-                                                                            {
-                                                                                subItem.title
-                                                                            }
-                                                                        </span>
-                                                                        <span className="ml-auto">
-                                                                            {isMenuOpen[
-                                                                                subItem
-                                                                                    .title
-                                                                            ] ? (
-                                                                                <ChevronDown className="w-4 h-4" />
-                                                                            ) : (
-                                                                                <ChevronRight className="w-4 h-4" />
-                                                                            )}
-                                                                        </span>
-                                                                    </button>
+                                                <span>{item.title}</span>
+                                                <span className="ml-auto">
+                                                    {isMenuOpen[item.title] ? (
+                                                        <ChevronDown className="w-4 h-4" />
+                                                    ) : (
+                                                        <ChevronRight className="w-4 h-4" />
+                                                    )}
+                                                </span>
+                                            </button>
 
-                                                                    {/* Nested Dropdown */}
-                                                                    {isMenuOpen[
-                                                                        subItem
-                                                                            .title
-                                                                    ] && (
-                                                                        <ul className="pl-8 mt-2">
-                                                                            {subItem.subMenu.map(
-                                                                                (
-                                                                                    nestedItem,
-                                                                                    nestedIndex
-                                                                                ) => (
-                                                                                    <li
-                                                                                        key={
-                                                                                            nestedIndex
-                                                                                        }
-                                                                                        className="mb-2"
-                                                                                    >
-                                                                                        <Link
-                                                                                            href={
-                                                                                                nestedItem.href
-                                                                                            }
-                                                                                            className="block px-4 py-2 hover:bg-gray-700"
-                                                                                        >
-                                                                                            {
-                                                                                                nestedItem.title
-                                                                                            }
-                                                                                        </Link>
-                                                                                    </li>
+                                            {/* Dropdown Content */}
+                                            {isMenuOpen[item.title] && (
+                                                <ul className="pl-8 mt-2">
+                                                    {item.subMenu.map(
+                                                        (subItem, subIndex) => (
+                                                            <li
+                                                                key={subIndex}
+                                                                className="mb-2"
+                                                            >
+                                                                {subItem.subMenu ? (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                toggleMenu(
+                                                                                    subItem.title
                                                                                 )
-                                                                            )}
-                                                                        </ul>
-                                                                    )}
-                                                                </>
-                                                            ) : (
-                                                                <Link
-                                                                    href={
-                                                                        subItem.href
-                                                                    }
-                                                                    className="block px-4 py-2 hover:bg-gray-700"
-                                                                >
-                                                                    {
-                                                                        subItem.title
-                                                                    }
-                                                                </Link>
-                                                            )}
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        )}
-                                    </>
-                                ) : (
-                                    <Link
-                                        href={item.href}
-                                        className="flex items-center px-4 py-2 hover:bg-gray-700"
-                                    >
-                                        <Home className="w-5 h-5 mr-2" />
-                                        {item.title}
-                                    </Link>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                                                                            }
+                                                                            className="flex items-center w-full px-4 py-2 hover:bg-gray-700"
+                                                                        >
+                                                                            <span>
+                                                                                {
+                                                                                    subItem.title
+                                                                                }
+                                                                            </span>
+                                                                            <span className="ml-auto">
+                                                                                {isMenuOpen[
+                                                                                    subItem
+                                                                                        .title
+                                                                                ] ? (
+                                                                                    <ChevronDown className="w-4 h-4" />
+                                                                                ) : (
+                                                                                    <ChevronRight className="w-4 h-4" />
+                                                                                )}
+                                                                            </span>
+                                                                        </button>
+
+                                                                        {/* Nested Dropdown */}
+                                                                        {isMenuOpen[
+                                                                            subItem
+                                                                                .title
+                                                                        ] && (
+                                                                            <ul className="pl-8 mt-2">
+                                                                                {subItem.subMenu.map(
+                                                                                    (
+                                                                                        nestedItem,
+                                                                                        nestedIndex
+                                                                                    ) => (
+                                                                                        <li
+                                                                                            key={
+                                                                                                nestedIndex
+                                                                                            }
+                                                                                            className="mb-2"
+                                                                                        >
+                                                                                            <Link
+                                                                                                href={
+                                                                                                    nestedItem.href
+                                                                                                }
+                                                                                                className="block px-4 py-2 hover:bg-gray-700"
+                                                                                            >
+                                                                                                {
+                                                                                                    nestedItem.title
+                                                                                                }
+                                                                                            </Link>
+                                                                                        </li>
+                                                                                    )
+                                                                                )}
+                                                                            </ul>
+                                                                        )}
+                                                                    </>
+                                                                ) : (
+                                                                    <Link
+                                                                        href={
+                                                                            subItem.href
+                                                                        }
+                                                                        className="block px-4 py-2 hover:bg-gray-700"
+                                                                    >
+                                                                        {
+                                                                            subItem.title
+                                                                        }
+                                                                    </Link>
+                                                                )}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <Link
+                                            href={item.href}
+                                            className="flex items-center px-4 py-2 hover:bg-gray-700"
+                                        >
+                                            <Home className="w-5 h-5 mr-2" />
+                                            {item.title}
+                                        </Link>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                )}
             </div>
 
-            <div className="flex-1 ml-64">
+            <div
+                className={`flex-1 transition-all duration-300 ease-in-out ${
+                    isSidebarOpen ? "ml-64" : "ml-16"
+                }`}
+            >
                 {/* Top Bar */}
                 <div className="bg-white shadow-md p-4">
                     <div className="flex justify-between items-center">

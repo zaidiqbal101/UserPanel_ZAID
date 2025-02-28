@@ -18,9 +18,24 @@ const QueryRemitter = () => {
             const response = await axios.post('/admin/remitter2/queryRemitter', { mobile });
             
             if (response.data.success) {
-                setData(response.data.data);
+                // Extract and flatten the nested data
+                const responseData = response.data.data;
+                const flattenedData = {
+                    status: responseData.status,
+                    response_code: responseData.response_code,
+                    message: responseData.message,
+                    // Extract nested data fields directly
+                    limit: responseData.data?.limit || "0.00",
+                    mobile: responseData.data?.mobile || mobile,
+                };
+                
+                setData(flattenedData);
+                
                 // After successful fetch, attempt to store the data
-                await handleStoreData(response.data.data);
+                await handleStoreData({
+                    mobile: flattenedData.mobile,
+                    limit: flattenedData.limit
+                });
             } else {
                 setError(response.data.message || 'Failed to fetch data');
                 setData(null);
@@ -35,11 +50,7 @@ const QueryRemitter = () => {
 
     const handleStoreData = async (remitterData) => {
         try {
-            // Extract relevant data from the API response
-            const storeResponse = await axios.post('/admin/remitter2/storeRemitter', {
-                mobile: mobile,
-                limit: remitterData.limit || 0, // Assuming the API returns a limit field
-            });
+            const storeResponse = await axios.post('/admin/remitter2/storeRemitter', remitterData);
 
             if (storeResponse.data.success) {
                 setSaveStatus({
