@@ -23,9 +23,11 @@ class Beneficiary2Controller extends Controller
 public function registerBeneficiary(Request $request)
 {
     if ($request->isMethod('post')) {
+        \Log::info('POST request received', $request->all());
+        
         $response = Http::withHeaders([
             'AuthorisedKey' => 'Y2RkZTc2ZmNjODgxODljMjkyN2ViOTlhM2FiZmYyM2I=',
-            'Token' => 'your_api_token',
+            'Token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOjE3Mzk5NDQ3MTksInBhcnRuZXJJZCI6IlBTMDAxNTY4IiwicmVxaWQiOiIxNzM5OTQ0NzE5In0.1bNrePHYUe-0FodOCdAMpPhL3Ivfpi7eVTT9V7xXsGI',
             'accept' => 'application/json',
             'Content-Type' => 'application/json',
         ])->post('https://sit.paysprint.in/service-api/api/v1/service/dmt-v2/beneficiary/registerbeneficiary', [
@@ -37,24 +39,34 @@ public function registerBeneficiary(Request $request)
             'verified' => $request->verified,
         ]);
 
+        \Log::info('API Response', ['status' => $response->status(), 'body' => $response->json()]);
+
         $responseData = $response->json();
 
         if ($response->successful() && isset($responseData['data'])) {
             try {
+                // Create a new beneficiary record with the data from the API
                 RegisterBeneficiary2::create([
-                    'bene_id' => $responseData['data']['bene_id'],
-                    'bankid' => $responseData['data']['bankid'],
-                    'bankname' => $responseData['data']['bankname'],
-                    'name' => $responseData['data']['name'],
-                    'accno' => $responseData['data']['accno'],
-                    'ifsc' => $responseData['data']['ifsc'],
-                    'verified' => $responseData['data']['verified'] === '1',
-                    'banktype' => $responseData['data']['banktype'],
-                    'status' => $responseData['data']['status'],
-                    'bank3' => $responseData['data']['bank3'] ?? false,
-                    'message' => $responseData['message'],
+                    'bene_id' => $responseData['data']['bene_id'] ?? null,
+                    'bankid' => $responseData['data']['bankid'] ?? null,
+                    'bankname' => $responseData['data']['bankname'] ?? null,
+                    'name' => $responseData['data']['name'] ?? null,
+                    'accno' => $responseData['data']['accno'] ?? null,
+                    'ifsc' => $responseData['data']['ifsc'] ?? null,
+                    'verified' => $responseData['data']['verified'] === '1', // Convert to boolean
+                    'banktype' => $responseData['data']['banktype'] ?? null,
+                    'status' => $responseData['data']['status'] ?? null,
+                    'bank3' => $responseData['data']['bank3'] ?? false, // Default to false if not present
+                    'message' => $responseData['message'] ?? null,
+                    // You might want to store the user who registered this beneficiary
+                    // 'user_id' => auth()->id(),
                 ]);
+                
+                \Log::info('Beneficiary saved successfully');
+                
             } catch (\Exception $e) {
+                \Log::error('Error saving beneficiary: ' . $e->getMessage());
+                
                 return Inertia::render('Admin/beneficiary2/registerBeneficiary', [
                     'success' => false,
                     'response' => $responseData,
@@ -62,16 +74,29 @@ public function registerBeneficiary(Request $request)
                     'beneficiaries' => $this->getBeneficiaries(),
                 ]);
             }
+            
+            return Inertia::render('Admin/beneficiary2/registerBeneficiary', [
+                'success' => true,
+                'response' => $responseData,
+                'beneficiaries' => $this->getBeneficiaries(),
+            ]);
+        } else {
+            \Log::warning('API request failed or invalid response format', [
+                'successful' => $response->successful(),
+                'has_data' => isset($responseData['data']),
+                'response' => $responseData
+            ]);
+            
+            return Inertia::render('Admin/beneficiary2/registerBeneficiary', [
+                'success' => false,
+                'response' => $responseData,
+                'error' => $responseData['message'] ?? 'Failed to register beneficiary.',
+                'beneficiaries' => $this->getBeneficiaries(),
+            ]);
         }
-
-        return Inertia::render('Admin/beneficiary2/registerBeneficiary', [
-            'success' => $response->successful(),
-            'response' => $responseData,
-            'error' => !$response->successful() ? 'Failed to register beneficiary.' : null,
-            'beneficiaries' => $this->getBeneficiaries(),
-        ]);
     }
 
+    // For GET requests, just return the form
     return Inertia::render('Admin/beneficiary2/registerBeneficiary', [
         'beneficiaries' => $this->getBeneficiaries(),
     ]);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { router } from '@inertiajs/react';
 
-const RemitterAdhaarApiVerify = ({ apiData, dbData, error }) => {
+const RemitterAdhaarApiVerify = ({ apiData, error }) => {
   const [formData, setFormData] = useState({
     mobile: '',
     aadhaar_no: ''
@@ -51,70 +51,33 @@ const RemitterAdhaarApiVerify = ({ apiData, dbData, error }) => {
   };
 
   const renderApiResponse = () => {
-    if (!apiData) return null;
+    if (!apiData || Object.keys(apiData).length === 0) return null;
 
     return (
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-4">API Response</h3>
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-          <table className="min-w-full table-auto text-sm">
+          <table className="min-w-full border-collapse border border-gray-200 text-sm">
             <thead className="bg-gray-100 border-b">
               <tr>
-                <th className="py-3 px-6 text-left font-medium text-gray-700">Field</th>
-                <th className="py-3 px-6 text-left font-medium text-gray-700">Value</th>
+                <th className="py-3 px-6 text-left font-medium text-gray-700 border border-gray-200">
+                  Field
+                </th>
+                <th className="py-3 px-6 text-left font-medium text-gray-700 border border-gray-200">
+                  Value
+                </th>
               </tr>
             </thead>
             <tbody>
               {Object.entries(apiData).map(([key, value]) => (
                 <tr key={key} className="border-b hover:bg-gray-50">
-                  <td className="py-3 px-6 text-gray-700 font-medium">
+                  <td className="py-3 px-6 text-gray-700 font-medium border border-gray-200">
                     {key.replace(/_/g, ' ').toUpperCase()}
                   </td>
-                  <td className="py-3 px-6 text-gray-600">
-                    {typeof value === 'object' ? JSON.stringify(value) : value.toString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  };
-
-  const renderDbResponse = () => {
-    if (!dbData) return null;
-
-    const displayFields = [
-      { key: 'id', label: 'Record ID' },
-      { key: 'status', label: 'Status' },
-      { key: 'message', label: 'Message' },
-      { key: 'mobile', label: 'Mobile Number' },
-      { key: 'aadhaar_no', label: 'Aadhaar Number' },
-      { key: 'response_code', label: 'Response Code' },
-      { key: 'created_at', label: 'Created At' },
-      { key: 'updated_at', label: 'Updated At' }
-    ];
-
-    return (
-      <div className="mt-6">
-        <h3 className="text-xl font-semibold mb-4">Stored Database Record</h3>
-        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-          <table className="min-w-full table-auto text-sm">
-            <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="py-3 px-6 text-left font-medium text-gray-700">Field</th>
-                <th className="py-3 px-6 text-left font-medium text-gray-700">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayFields.map(({ key, label }) => (
-                <tr key={key} className="border-b hover:bg-gray-50">
-                  <td className="py-3 px-6 text-gray-700 font-medium">{label}</td>
-                  <td className="py-3 px-6 text-gray-600">
-                    {key.includes('_at') 
-                      ? new Date(dbData[key]).toLocaleString()
-                      : dbData[key]}
+                  <td className="py-3 px-6 text-gray-600 border border-gray-200">
+                    {typeof value === "object" 
+                      ? <pre className="whitespace-pre-wrap">{JSON.stringify(value, null, 2)}</pre> 
+                      : value?.toString() || "N/A"}
                   </td>
                 </tr>
               ))}
@@ -180,14 +143,9 @@ const RemitterAdhaarApiVerify = ({ apiData, dbData, error }) => {
           </button>
         </form>
 
-        {error && (
-          <div className="mt-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
-            {error}
-          </div>
-        )}
+        {error && <div className="mt-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-md">{error}</div>}
 
         {renderApiResponse()}
-        {renderDbResponse()}
       </div>
     </AdminLayout>
   );

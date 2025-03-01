@@ -76,7 +76,7 @@ const PennyDrop = ({ apiResponse }) => {
         {/* API Response Table */}
         {responseData && (
           <div className="mt-12 max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold mb-4">📊 API Response (Table View)</h2>
+            <h2 className="text-2xl font-semibold mb-4"> API Response:</h2>
             <div className="overflow-x-auto rounded-lg shadow-lg">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead className="bg-blue-600 text-white">

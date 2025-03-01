@@ -101,18 +101,34 @@ const FetchbyBenied = () => {
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-4">Beneficiary Details:</h3>
             <div className="overflow-auto">
-              {response.data.map((item, index) => (
-                <div key={index} className="border border-gray-300 rounded-lg p-4 mb-4">
-                  <p><strong>Bene ID:</strong> {item.bene_id}</p>
-                  <p><strong>Bank ID:</strong> {item.bankid}</p>
-                  <p><strong>Bank Name:</strong> {item.bankname}</p>
-                  <p><strong>Name:</strong> {item.name}</p>
-                  <p><strong>Account Number:</strong> {item.accno}</p>
-                  <p><strong>IFSC:</strong> {item.ifsc}</p>
-                  <p><strong>Verified:</strong> {item.verified === '1' ? 'Yes' : 'No'}</p>
-                  <p><strong>Bank Type:</strong> {item.banktype}</p>
-                </div>
-              ))}
+              <table className="min-w-full border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border px-4 py-2">Bene ID</th>
+                    <th className="border px-4 py-2">Bank ID</th>
+                    <th className="border px-4 py-2">Bank Name</th>
+                    <th className="border px-4 py-2">Name</th>
+                    <th className="border px-4 py-2">Account Number</th>
+                    <th className="border px-4 py-2">IFSC</th>
+                    <th className="border px-4 py-2">Verified</th>
+                    <th className="border px-4 py-2">Bank Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {response.data.map((item, index) => (
+                    <tr key={index} className="border">
+                      <td className="border px-4 py-2">{item.bene_id}</td>
+                      <td className="border px-4 py-2">{item.bankid}</td>
+                      <td className="border px-4 py-2">{item.bankname}</td>
+                      <td className="border px-4 py-2">{item.name}</td>
+                      <td className="border px-4 py-2">{item.accno}</td>
+                      <td className="border px-4 py-2">{item.ifsc}</td>
+                      <td className="border px-4 py-2">{item.verified === '1' ? 'Yes' : 'No'}</td>
+                      <td className="border px-4 py-2">{item.banktype}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

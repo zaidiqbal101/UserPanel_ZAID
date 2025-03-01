@@ -94,7 +94,7 @@ const QueryRemitter = () => {
                         disabled={loading || !mobile}
                         className={`px-4 py-2 rounded text-white ${
                             loading || !mobile 
-                            ? 'bg-gray-400 cursor-not-allowed' 
+                            ? 'bg-blue-600 cursor-not-allowed' 
                             : 'bg-blue-500 hover:bg-blue-600'
                         }`}
                     >
@@ -142,11 +142,7 @@ const QueryRemitter = () => {
                     </div>
                 )}
 
-                {!data && !error && !loading && (
-                    <p className="text-gray-500 italic">
-                        Enter a mobile number and click search to view remitter details
-                    </p>
-                )}
+             
             </div>
         </AdminLayout>
     );
